@@ -25,8 +25,8 @@ end
 function love.draw(dt)
 	love.graphics.setColor(1,0,1,1)
 	love.graphics.print("cowboy")
-	love.graphics.circle("line", 100,100, 32, 32)
+	love.graphics.circle("line", 100,100, 32, 1000)
+	love.graphics.circle("line", 100,100, 32, 8)
 	love.graphics.print("Cowdoy!",100,100)
-	love.graphics.line(0, window.height - 100, window.width, window.height -100)
 	
 end
