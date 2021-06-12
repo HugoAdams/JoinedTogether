@@ -23,6 +23,6 @@ end
 
 
 function love.draw(dt)
-	love.graphics.setColor(1,1,1,1)
+	love.graphics.setColor(1,0,1,1)
 	
 end
