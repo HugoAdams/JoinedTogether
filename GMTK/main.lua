@@ -3,7 +3,7 @@ require("globals")
 
 function love.load(arg)
 	window.set = love.window.setMode(window.width,window.height)
-	
+	--TESTB
 end
 
 
