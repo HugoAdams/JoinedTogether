@@ -16,7 +16,7 @@ end
 
 --probably-too-flexible ctor
 function vec2:new(x, y)
-	if type(x) == "number" and type(y) == "number" then
+	if x and y then
 		return vec2:xy(x,y)
 	elseif x then
 		if type(x) == "number" then
@@ -92,12 +92,9 @@ function vec2:pooled_copy()
 end
 
 --release a vector to the pool
-function vec2:release(...)
+function vec2:release()
 	if vec2.pool_size() < _vec2_pool_limit then
 		table.insert(_vec2_pool, self)
-	end
-	if ... then
-		vec2.release(...)
 	end
 end
 
@@ -381,26 +378,8 @@ function vec2:rotate_around(angle, pivot)
 	return self:copy():rotate_aroundi(angle, pivot)
 end
 
--- angle/direction specific
-
---get the angle of this vector relative to (1, 0) 
 function vec2:angle()
 	return math.atan2(self.y, self.x)
-end
-
---get the normalised difference in angle between two vectors
-function vec2:angle_difference(v)
-	return math.angle_difference(self:angle(), v:angle())
-end
-
---lerp towards the direction of a provided vector
---(length unchanged)
-function vec2:lerp_directioni(v, t)
-	return self:rotatei(self:angle_difference(v) * t)
-end
-
-function vec2:lerp_direction(v, t)
-	return self:copy():lerp_directioni(v, t)
 end
 
 -----------------------------------------------------------
@@ -452,20 +431,6 @@ function vec2:abs()
 end
 
 -----------------------------------------------------------
--- sign
------------------------------------------------------------
-
-function vec2:signi()
-	self.x = math.sign(self.x)
-	self.y = math.sign(self.y)
-	return self
-end
-
-function vec2:sign()
-	return self:copy():signi()
-end
-
------------------------------------------------------------
 -- truncation/rounding
 -----------------------------------------------------------
 
@@ -487,6 +452,15 @@ function vec2:roundi()
 	return self
 end
 
+function vec2:decimal_roundi(places)
+	self:smuli(10^places)
+	self:roundi()
+	if math.abs(self.x) < 10 then self.x = 0 end
+	if math.abs(self.y) < 10 then self.y = 0 end
+	self:sdivi(10^places)
+	return self
+end
+
 function vec2:floor()
 	return self:copy():floori()
 end
@@ -497,6 +471,10 @@ end
 
 function vec2:round()
 	return self:copy():roundi()
+end
+
+function vec2:decimal_round(places)
+	return self:copy():decimal_roundi()
 end
 
 -----------------------------------------------------------
@@ -614,44 +592,6 @@ function vec2:apply_friction_xy(mu_x, mu_y, dt)
 	self.x = apply_friction_1d(self.x, mu_x, dt)
 	self.y = apply_friction_1d(self.y, mu_y, dt)
 	return self
-end
-
---minimum/maximum components
-function vec2:mincomp()
-	return math.min(self.x, self.y)
-end
-
-function vec2:maxcomp()
-	return math.max(self.x, self.y)
-end
-
--- mask out min component, with preference to keep x
-function vec2:majori()
-	if self.x > self.y then
-		self.y = 0
-	else
-		self.x = 0
-	end
-	return self
-end
--- mask out max component, with preference to keep x
-function vec2:minori()
-	if self.x < self.y then
-		self.y = 0
-	else
-		self.x = 0
-	end
-	return self
-end
-
-
---garbage generating versions
-function vec2:major(axis)
-	return self:copy():majori(axis)
-end
-
-function vec2:minor(axis)
-	return self:copy():minori(axis)
 end
 
 return vec2
