@@ -24,5 +24,6 @@ end
 
 function love.draw(dt)
 	love.graphics.setColor(1,0,1,1)
+	love.graphics.print("Cowdoy!",100,100)
 	
 end
