@@ -24,5 +24,7 @@ end
 
 function love.draw(dt)
 	love.graphics.setColor(1,0,1,1)
+	love.graphics.print("cowboy")
+	love.graphics.circle("line", 100,100, 32, 8)
 	
 end
